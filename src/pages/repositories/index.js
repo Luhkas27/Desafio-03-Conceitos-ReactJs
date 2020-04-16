@@ -20,7 +20,7 @@ function RepositoriesPage() {
     const res = await api.post('/repositories', {
       id: 1,
       url: 'http://github/com/luhkas27',
-      title: 'Desafio ReactJS',
+      title: `Repo ${Date.now()}`,
       techs: ['NodeJs, ReactJs, React Native'],
     });
     const repository = res.data;
@@ -39,6 +39,18 @@ function RepositoriesPage() {
     setRepositories([...list]);
   }
 
+  async function handleLikeRepository(id) {
+    await api.post(`/repositories/${id}/like`, {});
+
+    const repositoryLike = repositories.find(
+      (repository) => repository.id === id
+    );
+
+    repositoryLike += 1;
+
+    setRepositories([...repositoryLike]);
+  }
+
   return (
     <S.Container>
       <S.Title>Repositórios</S.Title>
@@ -49,6 +61,7 @@ function RepositoriesPage() {
             title={repository.title}
             techs={repository.techs}
             remove={() => handleRemoveRepository(repository.id)}
+            like={() => handleLikeRepository(repository.id)}
           />
         ))}
       </ul>
